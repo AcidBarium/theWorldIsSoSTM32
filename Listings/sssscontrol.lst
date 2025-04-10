@@ -1,0 +1,128 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             |.text|, CODE, READONLY
+    2 00000000                 EXPORT           set_angle_by_num
+    3 00000000                 PRESERVE8                    ; 显式声明保�
+                                                            � 8 字节对齐
+    4 00000000         
+    5 00000000         ; 声明全局变量
+    6 00000000                 IMPORT           Num
+    7 00000000                 IMPORT           Angle
+    8 00000000         
+    9 00000000         set_angle_by_num
+                               PROC
+   10 00000000 B510            PUSH             {r4, lr}    ; 保存寄存器�
+                                                            �返回地址（8�
+                                                            �节，满足对齐
+                                                            ）
+   11 00000002         
+   12 00000002         ; uint16_t zjk = Num / 35;
+   13 00000002 4C09            LDR              r4, =Num    ; r4 = &Num
+   14 00000004 8820            LDRH             r0, [r4]    ; r0 = Num (uint16_
+                                                            t)
+   15 00000006 F04F 0123       MOV              r1, #35     ; r1 = 35
+   16 0000000A FBB0 F2F1       UDIV             r2, r0, r1  ; r2 = Num / 35 (zj
+                                                            k)
+   17 0000000E         
+   18 0000000E         ; if (zjk & 1) - 检查奇偶性
+   19 0000000E F012 0F01       TST              r2, #1      ; 测试 zjk 的最
+                                                            低位
+   20 00000012 D004            BEQ              angle_30    ; 如果最低位�
+                                                            � 0（偶数），�
+                                                            ��转到 30
+   21 00000014         
+   22 00000014         ; Angle = 150;  - 奇数情况
+   23 00000014 4C05            LDR              r4, =Angle  ; r4 = &Angle
+   24 00000016 F04F 0096       MOV              r0, #150    ; r0 = 150
+   25 0000001A 6020            STR              r0, [r4]    ; Angle = 150 (存�
+                                                            ��为整数)
+   26 0000001C E003            B                end_if
+   27 0000001E         
+   28 0000001E         angle_30
+   29 0000001E         ; Angle = 30;   - 偶数情况
+   30 0000001E 4C03            LDR              r4, =Angle  ; r4 = &Angle
+   31 00000020 F04F 001E       MOV              r0, #30     ; r0 = 30
+   32 00000024 6020            STR              r0, [r4]    ; Angle = 30 (存�
+                                                            �为整数)
+   33 00000026         
+   34 00000026         end_if
+   35 00000026 BD10            POP              {r4, pc}    ; 恢复寄存器�
+                                                            �返回
+   36 00000028         
+   37 00000028                 ENDP
+   38 00000028                 END
+              00000000 
+              00000000 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\objects\sssscontrol.d -o.\objects\sssscontrol.o -I.\RTE\_Target_
+1 -IE:\keil\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include -IE:\keil\ARM\CMSI
+S\Include --predefine="__UVISION_VERSION SETA 524" --predefine="STM32F10X_MD SE
+TA 1" --list=.\listings\sssscontrol.lst User\ssssControl.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 1 in file User\ssssControl.s
+   Uses
+      None
+Comment: .text unused
+angle_30 0000001E
+
+Symbol: angle_30
+   Definitions
+      At line 28 in file User\ssssControl.s
+   Uses
+      At line 20 in file User\ssssControl.s
+Comment: angle_30 used once
+end_if 00000026
+
+Symbol: end_if
+   Definitions
+      At line 34 in file User\ssssControl.s
+   Uses
+      At line 26 in file User\ssssControl.s
+Comment: end_if used once
+set_angle_by_num 00000000
+
+Symbol: set_angle_by_num
+   Definitions
+      At line 9 in file User\ssssControl.s
+   Uses
+      At line 2 in file User\ssssControl.s
+Comment: set_angle_by_num used once
+4 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+Angle 00000000
+
+Symbol: Angle
+   Definitions
+      At line 7 in file User\ssssControl.s
+   Uses
+      At line 23 in file User\ssssControl.s
+      At line 30 in file User\ssssControl.s
+
+Num 00000000
+
+Symbol: Num
+   Definitions
+      At line 6 in file User\ssssControl.s
+   Uses
+      At line 13 in file User\ssssControl.s
+Comment: Num used once
+2 symbols
+340 symbols in table

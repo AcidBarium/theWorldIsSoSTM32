@@ -1,0 +1,196 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             |.text|, CODE, READONLY
+    2 00000000                 EXPORT           init
+    3 00000000                 PRESERVE8                    ; 显式声明保�
+                                                            � 8 字节对齐
+    4 00000000         
+    5 00000000         ; 声明外部函数
+    6 00000000                 IMPORT           Servo_Init
+    7 00000000                 IMPORT           OLED_Init
+    8 00000000                 IMPORT           JQ8x00_Init
+    9 00000000                 IMPORT           Key_Init
+   10 00000000                 IMPORT           CountSensor_Init
+   11 00000000                 IMPORT           NVIC_PriorityGroupConfig
+   12 00000000                 IMPORT           uart_init
+   13 00000000                 IMPORT           Delay_ms
+   14 00000000                 IMPORT           JQ8x00_Command_Data
+   15 00000000         
+   16 00000000         init    PROC
+   17 00000000 B510            PUSH             {r4, lr}    ; 保存寄存器�
+                                                            �返回地址（8�
+                                                            �节，满足对齐
+                                                            ）
+   18 00000002         
+   19 00000002         ; Servo_Init();
+   20 00000002 F7FF FFFE       BL               Servo_Init
+   21 00000006         
+   22 00000006         ; OLED_Init();
+   23 00000006 F7FF FFFE       BL               OLED_Init
+   24 0000000A         
+   25 0000000A         ; JQ8x00_Init();
+   26 0000000A F7FF FFFE       BL               JQ8x00_Init
+   27 0000000E         
+   28 0000000E         ; Key_Init();
+   29 0000000E F7FF FFFE       BL               Key_Init
+   30 00000012         
+   31 00000012         ; CountSensor_Init();
+   32 00000012 F7FF FFFE       BL               CountSensor_Init
+   33 00000016         
+   34 00000016         ; NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+   35 00000016 F04F 0002       MOV              r0, #2      ; NVIC_PriorityGrou
+                                                            p_2 通常为 2（�
+                                                            ��据 STM32F10x 库
+                                                            定义）
+   36 0000001A F7FF FFFE       BL               NVIC_PriorityGroupConfig
+   37 0000001E         
+   38 0000001E         ; uart_init(9600);
+   39 0000001E F242 5080       MOVW             r0, #9600   ; r0 = 9600（使�
+                                                            � MOVW 处理大立
+                                                            即数）
+   40 00000022 F7FF FFFE       BL               uart_init
+   41 00000026         
+   42 00000026         ; Delay_ms(500);
+   43 00000026 F240 10F4       MOVW             r0, #500    ; r0 = 500
+   44 0000002A F7FF FFFE       BL               Delay_ms
+   45 0000002E         
+   46 0000002E         ; JQ8x00_Command_Data(SetVolume, 0);
+   47 0000002E F04F 0013       MOV              r0, #19     ; SetVolume = 19 (0
+                                                            x13)
+   48 00000032 F04F 0100       MOV              r1, #0      ; 数据 = 0
+   49 00000036 F7FF FFFE       BL               JQ8x00_Command_Data
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   50 0000003A         
+   51 0000003A         ; Delay_ms(10);
+   52 0000003A F04F 000A       MOV              r0, #10     ; r0 = 10
+   53 0000003E F7FF FFFE       BL               Delay_ms
+   54 00000042         
+   55 00000042 BD10            POP              {r4, pc}    ; 恢复寄存器�
+                                                            �返回
+   56 00000044         
+   57 00000044                 ENDP
+   58 00000044                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\objects\ssinit.d -o.\objects\ssinit.o -I.\RTE\_Target_1 -IE:\kei
+l\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include -IE:\keil\ARM\CMSIS\Include 
+--predefine="__UVISION_VERSION SETA 524" --predefine="STM32F10X_MD SETA 1" --li
+st=.\listings\ssinit.lst User\SSinit.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 1 in file User\SSinit.s
+   Uses
+      None
+Comment: .text unused
+init 00000000
+
+Symbol: init
+   Definitions
+      At line 16 in file User\SSinit.s
+   Uses
+      At line 2 in file User\SSinit.s
+Comment: init used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+CountSensor_Init 00000000
+
+Symbol: CountSensor_Init
+   Definitions
+      At line 10 in file User\SSinit.s
+   Uses
+      At line 32 in file User\SSinit.s
+Comment: CountSensor_Init used once
+Delay_ms 00000000
+
+Symbol: Delay_ms
+   Definitions
+      At line 13 in file User\SSinit.s
+   Uses
+      At line 44 in file User\SSinit.s
+      At line 53 in file User\SSinit.s
+
+JQ8x00_Command_Data 00000000
+
+Symbol: JQ8x00_Command_Data
+   Definitions
+      At line 14 in file User\SSinit.s
+   Uses
+      At line 49 in file User\SSinit.s
+Comment: JQ8x00_Command_Data used once
+JQ8x00_Init 00000000
+
+Symbol: JQ8x00_Init
+   Definitions
+      At line 8 in file User\SSinit.s
+   Uses
+      At line 26 in file User\SSinit.s
+Comment: JQ8x00_Init used once
+Key_Init 00000000
+
+Symbol: Key_Init
+   Definitions
+      At line 9 in file User\SSinit.s
+   Uses
+      At line 29 in file User\SSinit.s
+Comment: Key_Init used once
+NVIC_PriorityGroupConfig 00000000
+
+Symbol: NVIC_PriorityGroupConfig
+   Definitions
+      At line 11 in file User\SSinit.s
+   Uses
+      At line 36 in file User\SSinit.s
+Comment: NVIC_PriorityGroupConfig used once
+OLED_Init 00000000
+
+Symbol: OLED_Init
+   Definitions
+      At line 7 in file User\SSinit.s
+   Uses
+      At line 23 in file User\SSinit.s
+Comment: OLED_Init used once
+Servo_Init 00000000
+
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+External symbols
+
+Symbol: Servo_Init
+   Definitions
+      At line 6 in file User\SSinit.s
+   Uses
+      At line 20 in file User\SSinit.s
+Comment: Servo_Init used once
+uart_init 00000000
+
+Symbol: uart_init
+   Definitions
+      At line 12 in file User\SSinit.s
+   Uses
+      At line 40 in file User\SSinit.s
+Comment: uart_init used once
+9 symbols
+343 symbols in table

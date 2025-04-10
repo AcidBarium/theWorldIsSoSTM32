@@ -1,0 +1,171 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             |.text|, CODE, READONLY
+    2 00000000                 EXPORT           check_num_threshold
+    3 00000000                 PRESERVE8                    ; 显式声明保�
+                                                            � 8 字节对齐
+    4 00000000         
+    5 00000000         ; 声明外部函数
+    6 00000000                 IMPORT           JQ8x00_Command_Data
+    7 00000000         
+    8 00000000         ; 声明全局变量
+    9 00000000                 IMPORT           Num
+   10 00000000                 IMPORT           isMentionWork
+   11 00000000                 IMPORT           sensor_cnt
+   12 00000000                 IMPORT           sensor_cnt_last
+   13 00000000         
+   14 00000000         check_num_threshold
+                               PROC
+   15 00000000 B570            PUSH             {r4-r6, lr} ; 保存寄存器�
+                                                            �返回地址（16�
+                                                            ��节）
+   16 00000002 B081            SUB              SP, SP, #4  ; 调整栈指针�
+                                                            �确保 8 字节对
+                                                            齐（20字节）
+   17 00000004         
+   18 00000004         ; if (Num >= 1500)
+   19 00000004 4C0D            LDR              r4, =Num    ; r4 = &Num
+   20 00000006 8820            LDRH             r0, [r4]    ; r0 = Num (uint16_
+                                                            t)
+   21 00000008 F240 51DC       MOVW             r1, #1500   ; r1 = 1500（使�
+                                                            � MOVW 加载大立
+                                                            即数）
+   22 0000000C 4288            CMP              r0, r1      ; 比较 Num 和 15
+                                                            00
+   23 0000000E D313            BLO              end_if      ; 如果 Num < 1500
+                                                            ，跳到结束
+   24 00000010         
+   25 00000010         ; isMentionWork = 1;
+   26 00000010 4D0B            LDR              r5, =isMentionWork ; r5 = &isMe
+                                                            ntionWork
+   27 00000012 F04F 0201       MOV              r2, #1
+   28 00000016 702A            STRB             r2, [r5]    ; isMentionWork = 1
+                                                             (字节存储)
+   29 00000018         
+   30 00000018         ; JQ8x00_Command_Data(SetVolume, 0);
+   31 00000018 F04F 0013       MOV              r0, #19     ; SetVolume = 19 (0
+                                                            x13)
+   32 0000001C F04F 0100       MOV              r1, #0      ; 数据 = 0
+   33 00000020 F7FF FFFE       BL               JQ8x00_Command_Data
+   34 00000024         
+   35 00000024         ; JQ8x00_Command_Data(AppointTrack, 2);
+   36 00000024 F04F 0007       MOV              r0, #7      ; AppointTrack = 7 
+                                                            (0x07)
+   37 00000028 F04F 0102       MOV              r1, #2      ; 数据 = 2
+   38 0000002C F7FF FFFE       BL               JQ8x00_Command_Data
+   39 00000030         
+   40 00000030         ; sensor_cnt_last = sensor_cnt;
+   41 00000030 4D04            LDR              r5, =sensor_cnt 
+                                                            ; r5 = &sensor_cnt
+   42 00000032 882A            LDRH             r2, [r5]    ; r2 = sensor_cnt
+   43 00000034 4E04            LDR              r6, =sensor_cnt_last ; r6 = &se
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                                                            nsor_cnt_last
+   44 00000036 8032            STRH             r2, [r6]    ; sensor_cnt_last =
+                                                             sensor_cnt
+   45 00000038         
+   46 00000038         end_if
+   47 00000038 B001            ADD              SP, SP, #4  ; 恢复栈指针
+   48 0000003A BD70            POP              {r4-r6, pc} ; 恢复寄存器�
+                                                            �返回
+   49 0000003C         
+   50 0000003C                 ENDP
+   51 0000003C                 END
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\objects\ssscontrol.d -o.\objects\ssscontrol.o -I.\RTE\_Target_1 
+-IE:\keil\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include -IE:\keil\ARM\CMSIS\
+Include --predefine="__UVISION_VERSION SETA 524" --predefine="STM32F10X_MD SETA
+ 1" --list=.\listings\ssscontrol.lst User\sssControl.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 1 in file User\sssControl.s
+   Uses
+      None
+Comment: .text unused
+check_num_threshold 00000000
+
+Symbol: check_num_threshold
+   Definitions
+      At line 14 in file User\sssControl.s
+   Uses
+      At line 2 in file User\sssControl.s
+Comment: check_num_threshold used once
+end_if 00000038
+
+Symbol: end_if
+   Definitions
+      At line 46 in file User\sssControl.s
+   Uses
+      At line 23 in file User\sssControl.s
+Comment: end_if used once
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+JQ8x00_Command_Data 00000000
+
+Symbol: JQ8x00_Command_Data
+   Definitions
+      At line 6 in file User\sssControl.s
+   Uses
+      At line 33 in file User\sssControl.s
+      At line 38 in file User\sssControl.s
+
+Num 00000000
+
+Symbol: Num
+   Definitions
+      At line 9 in file User\sssControl.s
+   Uses
+      At line 19 in file User\sssControl.s
+Comment: Num used once
+isMentionWork 00000000
+
+Symbol: isMentionWork
+   Definitions
+      At line 10 in file User\sssControl.s
+   Uses
+      At line 26 in file User\sssControl.s
+Comment: isMentionWork used once
+sensor_cnt 00000000
+
+Symbol: sensor_cnt
+   Definitions
+      At line 11 in file User\sssControl.s
+   Uses
+      At line 41 in file User\sssControl.s
+Comment: sensor_cnt used once
+sensor_cnt_last 00000000
+
+Symbol: sensor_cnt_last
+   Definitions
+      At line 12 in file User\sssControl.s
+   Uses
+      At line 43 in file User\sssControl.s
+Comment: sensor_cnt_last used once
+5 symbols
+342 symbols in table

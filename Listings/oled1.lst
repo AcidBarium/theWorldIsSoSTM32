@@ -1,0 +1,118 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             |.text|, CODE, READONLY
+    2 00000000                 EXPORT           display_oled
+    3 00000000                 PRESERVE8                    ; 显式声明保�
+                                                            � 8 字节对齐
+    4 00000000         
+    5 00000000         ; 声明外部函数 OLED_ShowNum
+    6 00000000                 IMPORT           OLED_ShowNum
+    7 00000000         
+    8 00000000         display_oled
+                               PROC
+    9 00000000 B5F0            PUSH             {r4-r7, lr} ; 保存寄存器�
+                                                            �返回地址
+   10 00000002 B081            SUB              SP, SP, #4  ; 调整栈指针�
+                                                            �确保 8 字节对
+                                                            齐（PUSH 压入 5
+                                                             个寄存器 = 20 
+                                                            字节）
+   11 00000004         
+   12 00000004         ; 保存传入的参数
+   13 00000004 4604            MOV              r4, r0      ; r4 = sensor_cnt
+   14 00000006 460D            MOV              r5, r1      ; r5 = Angle (假�
+                                                            �为整数传递)
+   15 00000008 4616            MOV              r6, r2      ; r6 = Num
+   16 0000000A 461F            MOV              r7, r3      ; r7 = is_ok
+   17 0000000C         
+   18 0000000C         ; 调用 OLED_ShowNum(1, 7, sensor_cnt, 5)
+   19 0000000C F04F 0001       MOV              r0, #1      ; 行号 = 1
+   20 00000010 F04F 0107       MOV              r1, #7      ; 列号 = 7
+   21 00000014 4622            MOV              r2, r4      ; 值 = sensor_cnt
+   22 00000016 F04F 0305       MOV              r3, #5      ; 位数 = 5
+   23 0000001A F7FF FFFE       BL               OLED_ShowNum ; 调用 C 函数
+   24 0000001E         
+   25 0000001E         ; 调用 OLED_ShowNum(2, 7, Angle, 5)
+   26 0000001E F04F 0002       MOV              r0, #2      ; 行号 = 2
+   27 00000022 F04F 0107       MOV              r1, #7      ; 列号 = 7
+   28 00000026 462A            MOV              r2, r5      ; 值 = Angle
+   29 00000028 F04F 0305       MOV              r3, #5      ; 位数 = 5
+   30 0000002C F7FF FFFE       BL               OLED_ShowNum ; 调用 C 函数
+   31 00000030         
+   32 00000030         ; 调用 OLED_ShowNum(3, 7, Num, 5)
+   33 00000030 F04F 0003       MOV              r0, #3      ; 行号 = 3
+   34 00000034 F04F 0107       MOV              r1, #7      ; 列号 = 7
+   35 00000038 4632            MOV              r2, r6      ; 值 = Num
+   36 0000003A F04F 0305       MOV              r3, #5      ; 位数 = 5
+   37 0000003E F7FF FFFE       BL               OLED_ShowNum ; 调用 C 函数
+   38 00000042         
+   39 00000042         ; 调用 OLED_ShowNum(4, 1, is_ok, 5)
+   40 00000042 F04F 0004       MOV              r0, #4      ; 行号 = 4
+   41 00000046 F04F 0101       MOV              r1, #1      ; 列号 = 1
+   42 0000004A 463A            MOV              r2, r7      ; 值 = is_ok
+   43 0000004C F04F 0305       MOV              r3, #5      ; 位数 = 5
+   44 00000050 F7FF FFFE       BL               OLED_ShowNum ; 调用 C 函数
+   45 00000054         
+   46 00000054 B001            ADD              SP, SP, #4  ; 恢复栈指针
+   47 00000056 BDF0            POP              {r4-r7, pc} ; 恢复寄存器�
+                                                            �返回
+   48 00000058         
+   49 00000058                 ENDP
+   50 00000058                 END
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\objects\oled1.d -o.\objects\oled1.o -I.\RTE\_Target_1 -IE:\keil\
+ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include -IE:\keil\ARM\CMSIS\Include --
+predefine="__UVISION_VERSION SETA 524" --predefine="STM32F10X_MD SETA 1" --list
+=.\listings\oled1.lst User\OLED1.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 1 in file User\OLED1.s
+   Uses
+      None
+Comment: .text unused
+display_oled 00000000
+
+Symbol: display_oled
+   Definitions
+      At line 8 in file User\OLED1.s
+   Uses
+      At line 2 in file User\OLED1.s
+Comment: display_oled used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+OLED_ShowNum 00000000
+
+Symbol: OLED_ShowNum
+   Definitions
+      At line 6 in file User\OLED1.s
+   Uses
+      At line 23 in file User\OLED1.s
+      At line 30 in file User\OLED1.s
+      At line 37 in file User\OLED1.s
+      At line 44 in file User\OLED1.s
+
+1 symbol
+335 symbols in table
